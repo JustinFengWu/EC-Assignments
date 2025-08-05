@@ -76,45 +76,81 @@ class TSP:
         return self.distance_matrix[i][j]
 
 
-def local_search(tsp: TSP, neighbourhood_operator, max_iters=1000):
+def local_search(tsp: TSP, neighbourhood_operator):
     current = random_permutation(tsp.dimension)
     current_length = tsp.path_length(current)
 
-    for _ in range(max_iters):
-        candidate = neighbourhood_operator(current.copy())
-        candidate_length = tsp.path_length(candidate)
-        if candidate_length < current_length:
-            current, current_length = candidate, candidate_length
+    if neighbourhood_operator == "jump":
+        neighbourhood = get_all_jump_neighbours(current)
+    elif neighbourhood_operator == "exchange":
+        neighbourhood = get_all_exchange_neighbours(current)
+    elif neighbourhood_operator == "2opt":
+        neighbourhood = get_all_2opt_neighbours(current)
+    else:
+        raise ValueError("Unknown neighbourhood operator")
+    print("Current: ")
+    print(current)
+    print("Neighbourhood: ")
+    for _ in neighbourhood:
+        print(f"{_}\n")
 
-    return current_length
+    neighbourhood = list({tuple(tour) for tour in neighbourhood})
+
+    # Compute lengths of all neighbours
+    lengths = [tsp.path_length(tour) for tour in neighbourhood]
+
+    min_length = min(lengths)
+    avg_length = sum(lengths) / len(lengths)
+
+    print(f"Initial tour length: {current_length}")
+    print(f"Minimum neighbour length: {min_length}")
+    print(f"Average neighbour length: {avg_length:.2f}")
+
+    return min_length, avg_length
 
 
-def jump(perm):
-    first = random.randint(1, len(perm) - 2)
-    second = first
-    while second == first:
-        second = random.randint(1, len(perm) - 2)
+# -------------------------------
+# Neighbourhood generators
+# -------------------------------
+def get_all_jump_neighbours(tour):
+    """Generate all neighbours by moving one city to a new position."""
+    neighbours = []
+    n = len(tour)
 
-    val = perm.pop(second)
-    perm.insert(first + 1, val)
-    perm[-1] = perm[0]
-    return perm
+    # Assume closed tour: start == end → do not move first or last city
+    for i in range(1, n - 1):  # Don't move the starting/ending city
+        for j in range(1, n - 1):
+            if i == j:
+                continue
+            new_tour = tour[:]
+            city = new_tour.pop(i)
+            new_tour.insert(j, city)
+            neighbours.append(new_tour)
+
+    return neighbours
 
 
-def exchange(perm):
-    i = random.randint(1, len(perm) - 2)
-    j = i
-    while j == i:
-        j = random.randint(1, len(perm) - 2)
-    perm[i], perm[j] = perm[j], perm[i]
-    return perm
+def get_all_exchange_neighbours(tour):
+    """Generate all neighbours by swapping two cities."""
+    neighbours = []
+    n = len(tour)
+    for i in range(1, n - 1):
+        for j in range(i + 1, n - 1):
+            new_tour = tour[:]
+            new_tour[i], new_tour[j] = new_tour[j], new_tour[i]
+            neighbours.append(new_tour)
+    return neighbours
 
 
-def two_opt(perm):
-    i = random.randint(1, len(perm) - 3)
-    j = random.randint(i + 1, len(perm) - 2)
-    perm[i:j+1] = reversed(perm[i:j+1])
-    return perm
+def get_all_2opt_neighbours(tour):
+    """Generate all neighbours by 2-opt reversal."""
+    neighbours = []
+    n = len(tour)
+    for i in range(1, n - 2):
+        for j in range(i + 1, n - 1):
+            new_tour = tour[:i] + tour[i:j + 1][::-1] + tour[j + 1:]
+            neighbours.append(new_tour)
+    return neighbours
 
 
 def random_permutation(n):
@@ -125,9 +161,9 @@ def random_permutation(n):
 
 
 def run_all_instances():
-    # tsp_names = ["eil51"]
-    tsp_names = ["eil51", "eil76", "eil101", "kroA100", "kroC100",
-                 "kroD100", "lin105", "pcb442", "pr2392", "st70", "usa13509"]
+    tsp_names = ["6"]
+    # tsp_names = ["eil51", "eil76", "eil101", "kroA100", "kroC100",
+    #              "kroD100", "lin105", "pcb442", "pr2392", "st70", "usa13509"]
     results = {}
 
     for name in tsp_names:
@@ -137,41 +173,15 @@ def run_all_instances():
             tsp.name = name
             print(f"Running TSP instance: {tsp.name}")
 
-            for operator_name, operator_fn in {
-                "jump": jump,
-                "exchange": exchange,
-                "2opt": two_opt
-            }.items():
-                lengths = []
-                for _ in range(30):
-                    length = local_search(tsp, operator_fn)
-                    lengths.append(length)
-                min_len = min(lengths)
-                avg_len = sum(lengths) / len(lengths)
-                results[(tsp.name, operator_name)] = (min_len, avg_len)
+            for operator_name in {"jump","exchange","2opt"}:
+                for _ in range(1):
+                    min_length, average_length = local_search(tsp, operator_name)
+                    print(f"Name: {name}, Instance: {_}, Min: {min_length}, Mean: {average_length}")
 
         except Exception as e:
             print(f"Failed loading or processing {name}: {e}")
 
     write_results(results)
-
-
-def load_all_tsps():
-    from pathlib import Path
-    instances = []
-    tsp_names = ["eil51", "eil76", "eil101", "kroA100", "kroC100",
-                 "kroD100", "lin105", "pcb442", "pr2392", "st70", "usa13509"]
-
-    for name in tsp_names:
-        try:
-            filepath = Path(f"tsp/{name}.tsp")
-            tsp = TSP(filepath)
-            tsp.name = name
-            instances.append(tsp)
-        except Exception as e:
-            print(f"Failed loading {name}: {e}")
-    return instances
-
 
 def main():
     run_all_instances()
