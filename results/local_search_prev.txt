@@ -1,33 +1,30 @@
-eil51 jump min: 423.00, mean: 567.33
-eil51 exchange min: 648.00, mean: 772.50
-eil51 2opt min: 540.00, mean: 588.97
-eil76 jump min: 833.00, mean: 1028.40
-eil76 exchange min: 1132.00, mean: 1200.80
-eil76 2opt min: 872.00, mean: 966.50
-eil101 jump min: 1272.00, mean: 1499.33
-eil101 exchange min: 1556.00, mean: 1683.33
-eil101 2opt min: 1261.00, mean: 1389.80
-kroA100 jump min: 58301.00, mean: 67821.40
-kroA100 exchange min: 67573.00, mean: 75895.27
-kroA100 2opt min: 54085.00, mean: 60344.20
-kroC100 jump min: 56891.00, mean: 66522.47
-kroC100 exchange min: 65917.00, mean: 73342.10
-kroC100 2opt min: 51906.00, mean: 59723.17
-kroD100 jump min: 57986.00, mean: 64686.97
-kroD100 exchange min: 66886.00, mean: 74436.13
-kroD100 2opt min: 50566.00, mean: 58867.17
-lin105 jump min: 39412.00, mean: 49006.77
-lin105 exchange min: 49173.00, mean: 54999.17
-lin105 2opt min: 38962.00, mean: 43509.20
-pcb442 jump min: 482921.00, mean: 500446.27
-pcb442 exchange min: 489833.00, mean: 505226.87
-pcb442 2opt min: 473449.00, mean: 493787.33
-pr2392 jump min: 12999880.00, mean: 13274595.30
-pr2392 exchange min: 12925200.00, mean: 13171012.37
-pr2392 2opt min: 13337394.00, mean: 13583762.33
-st70 jump min: 1103.00, mean: 1371.67
-st70 exchange min: 1426.00, mean: 1648.43
-st70 2opt min: 1106.00, mean: 1256.50
-usa13509 jump min: 2078008225.00, mean: 2092017110.40
-usa13509 exchange min: 2069158598.00, mean: 2087563703.43
-usa13509 2opt min: 2090502330.00, mean: 2106467358.93
+Name: eil51  Method: jump    Instance: 1   Min: 494.00, Mean: 548.63
+Name: eil51  Method: jump    Instance: 2   Min: 528.00, Mean: 581.17
+Name: eil51  Method: jump    Instance: 3   Min: 489.00, Mean: 543.31
+Name: eil51  Method: jump    Instance: 4   Min: 488.00, Mean: 542.66
+Name: eil51  Method: jump    Instance: 5   Min: 477.00, Mean: 531.46
+Name: eil51  Method: jump    Instance: 6   Min: 479.00, Mean: 533.67
+Name: eil51  Method: jump    Instance: 7   Min: 505.00, Mean: 559.33
+Name: eil51  Method: jump    Instance: 8   Min: 447.00, Mean: 501.94
+Name: eil51  Method: jump    Instance: 9   Min: 471.00, Mean: 525.42
+Name: eil51  Method: jump    Instance: 10   Min: 493.00, Mean: 547.18
+Name: eil51  Method: jump    Instance: 11   Min: 499.00, Mean: 552.72
+Name: eil51  Method: jump    Instance: 12   Min: 501.00, Mean: 554.79
+Name: eil51  Method: jump    Instance: 13   Min: 466.00, Mean: 520.62
+Name: eil51  Method: jump    Instance: 14   Min: 472.00, Mean: 526.53
+Name: eil51  Method: jump    Instance: 15   Min: 496.00, Mean: 550.21
+Name: eil51  Method: jump    Instance: 16   Min: 495.00, Mean: 549.22
+Name: eil51  Method: jump    Instance: 17   Min: 448.00, Mean: 502.52
+Name: eil51  Method: jump    Instance: 18   Min: 457.00, Mean: 512.13
+Name: eil51  Method: jump    Instance: 19   Min: 485.00, Mean: 539.45
+Name: eil51  Method: jump    Instance: 20   Min: 493.00, Mean: 546.65
+Name: eil51  Method: jump    Instance: 21   Min: 475.00, Mean: 529.39
+Name: eil51  Method: jump    Instance: 22   Min: 468.00, Mean: 522.44
+Name: eil51  Method: jump    Instance: 23   Min: 466.00, Mean: 520.59
+Name: eil51  Method: jump    Instance: 24   Min: 460.00, Mean: 515.28
+Name: eil51  Method: jump    Instance: 25   Min: 481.00, Mean: 535.03
+Name: eil51  Method: jump    Instance: 26   Min: 468.00, Mean: 523.13
+Name: eil51  Method: jump    Instance: 27   Min: 478.00, Mean: 532.37
+Name: eil51  Method: jump    Instance: 28   Min: 480.00, Mean: 534.38
+Name: eil51  Method: jump    Instance: 29   Min: 459.00, Mean: 513.62
+Name: eil51  Method: jump    Instance: 30   Min: 537.00, Mean: 590.11
