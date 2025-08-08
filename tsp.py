@@ -14,7 +14,7 @@ from tqdm import tqdm
 
 def write_results(results):
     os.makedirs("results", exist_ok=True)
-    with open("results/local_search_prev.txt", "a") as f:
+    with open("results/local_search.txt", "a") as f:
         for (tsp_name, method, _), (min_len, avg_len) in results.items():
             f.write(
                 f"Name: {tsp_name}  Method: {method}    Instance: {_ + 1}   Min: {min_len:.2f}, Mean: {avg_len:.2f}\n")
@@ -84,11 +84,13 @@ def local_search(tsp: TSP, neighbourhood_operator):
 
     if neighbourhood_operator == "jump":
         local_min_tour, local_min_length = get_jump_local_minimum(tsp, current, float('inf'))
-        neighbourhood = get_jump_neighbourhood(local_min_tour)
+        neighbourhood = get_neighbourhood(local_min_tour)
     elif neighbourhood_operator == "exchange":
-        local_min_tour, local_min_length = get_all_exchange_neighbours(tsp, current)
+        local_min_tour, local_min_length = get_exchange_local_minimum(tsp, current, float('inf'))
+        neighbourhood = get_neighbourhood(local_min_tour)
     elif neighbourhood_operator == "2opt":
-        local_min_tour, local_min_length = get_all_2opt_neighbours(tsp, current)
+        local_min_tour, local_min_length = get_2opt_local_minimum(tsp, current, float('inf'))
+        neighbourhood = get_neighbourhood(local_min_tour)
     else:
         raise ValueError("Unknown neighbourhood operator")
     
@@ -149,8 +151,69 @@ def get_jump_local_minimum(tsp, tour, max_iterations):
     # The plan here is to find the tour that is the local min, and then we could use another function to find all other neighbours
     return current, current_path_length
 
+def get_exchange_local_minimum(tsp, tour, max_iterations):
+    """Generate all neighbours by swapping two cities."""
+    iterations = 0
+    current = tour[:]
+    current_path_length = tsp.path_length(tour)
+
+    while iterations < max_iterations:
+        iterations += 1
+        better_neighbour_found = False
+        n = len(current)
+
+        # need to change the logic here a little bit, searching for every exchange possibility
+        for i in range(1, n - 2): 
+            for j in range(i + 1, n - 1):
+                new_tour_body = current[:]
+                new_tour_body[i], new_tour_body[j] = new_tour_body[j], new_tour_body[i]
+                new_path_length = tsp.path_length(new_tour_body)
+
+                if new_path_length < current_path_length:
+                    current, current_path_length = new_tour_body, new_path_length
+                    better_neighbour_found = True
+                    break
+            if better_neighbour_found:
+                break
+        if not better_neighbour_found:
+            break
+
+    return current, current_path_length
+
+
+def get_2opt_local_minimum(tsp, tour, max_iterations):
+    """Generate all neighbours by 2-opt reversal."""
+    iterations = 0
+    current = tour[:]
+    current_path_length = tsp.path_length(tour)
+
+    while iterations < max_iterations:
+        iterations += 1
+        better_neighbour_found = False
+        n = len(current)
+
+        for i in range(1, n - 2): 
+            for j in range(i + 1, n - 1):
+                # use python slicing to reverse sub-segment of the tour
+                # [:i] = from 0 to i (non-inclusive), [i:j + 1] = i 1o j (inclusive), [::-1] = reverse, [j + 1] = j + 1 onwards (inclusive)
+                new_tour_body = current[:i] + current[i:j + 1][::-1] + current[j + 1:]
+                new_path_length = tsp.path_length(new_tour_body)
+
+                if new_path_length < current_path_length:
+                    current, current_path_length = new_tour_body, new_path_length
+                    better_neighbour_found = True
+                    break
+            if better_neighbour_found:
+                break
+        if not better_neighbour_found:
+            break
+
+    return current, current_path_length
+
+
+
 # decided to have a separate function to generate all neighbours from the local minimum to keep it more modular
-def get_jump_neighbourhood(tour):
+def get_neighbourhood(tour):
     tour_body = tour[1:-1]
     n = len(tour_body)
     neighbourhood = []
@@ -163,28 +226,6 @@ def get_jump_neighbourhood(tour):
             new_tour_body.insert(j, city)
             neighbourhood.append([tour[0]] + new_tour_body + [tour[-1]])
     return neighbourhood
-
-def get_all_exchange_neighbours(tour):
-    """Generate all neighbours by swapping two cities."""
-    neighbours = []
-    n = len(tour)
-    for i in range(1, n - 1):
-        for j in range(i + 1, n - 1):
-            new_tour = tour[:]
-            new_tour[i], new_tour[j] = new_tour[j], new_tour[i]
-            neighbours.append(new_tour)
-    return neighbours
-
-
-def get_all_2opt_neighbours(tour):
-    """Generate all neighbours by 2-opt reversal."""
-    neighbours = []
-    n = len(tour)
-    for i in range(1, n - 2):
-        for j in range(i + 1, n - 1):
-            new_tour = tour[:i] + tour[i:j + 1][::-1] + tour[j + 1:]
-            neighbours.append(new_tour)
-    return neighbours
 
 
 def random_permutation(n):
@@ -208,7 +249,7 @@ def run_all_instances():
             print(f"Running TSP instance: {tsp.name}")
 
             # for operator_name in {"jump","exchange","2opt"}:
-            for operator_name in {"jump"}:
+            for operator_name in {"2opt"}:
                 for _ in tqdm(range(30), desc=f"{name} - {operator_name}"):
                     min_length, average_length = local_search(tsp, operator_name)
                     # print(f"Name: {name}, Instance: {_}, Min: {min_length}, Mean: {average_length}")
