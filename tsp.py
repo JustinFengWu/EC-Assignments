@@ -14,10 +14,10 @@ from tqdm import tqdm
 
 def write_results(results):
     os.makedirs("results", exist_ok=True)
-    with open("results/local_search.txt", "a") as f:
-        for (tsp_name, method, _), (min_len, avg_len) in results.items():
+    with open("results/local_search_prev.txt", "a") as f:
+        for (tsp_name, method), (min_len, avg_len) in results.items():
             f.write(
-                f"Name: {tsp_name}  Method: {method}    Instance: {_ + 1}   Min: {min_len:.2f}, Mean: {avg_len:.2f}\n")
+                f"Name: {tsp_name}  Method: {method}   Min: {min_len:.2f}, Mean: {avg_len:.2f}\n")
     print("Local search results written to results/local_search.txt")
 
 
@@ -78,36 +78,29 @@ class TSP:
         return self.distance_matrix[i][j]
 
 
+# The function that connects operator with relative functions
 def local_search(tsp: TSP, neighbourhood_operator):
     # Creating an initial solution with a random permutation of cities
     current = random_permutation(tsp.dimension)
 
     if neighbourhood_operator == "jump":
-        local_min_tour, local_min_length = get_jump_local_minimum(tsp, current, float('inf'))
-        neighbourhood = get_neighbourhood(local_min_tour)
+        _, local_min_length = get_jump_local_minimum(tsp, current, float('inf'))
     elif neighbourhood_operator == "exchange":
-        local_min_tour, local_min_length = get_exchange_local_minimum(tsp, current, float('inf'))
-        neighbourhood = get_neighbourhood(local_min_tour)
+        _, local_min_length = get_exchange_local_minimum(tsp, current, float('inf'))
     elif neighbourhood_operator == "2opt":
-        local_min_tour, local_min_length = get_2opt_local_minimum(tsp, current, float('inf'))
-        neighbourhood = get_neighbourhood(local_min_tour)
+        _, local_min_length = get_2opt_local_minimum(tsp, current, float('inf'))
     else:
         raise ValueError("Unknown neighbourhood operator")
     
-    # remove duplicates by putting into set and converting back to list
-    neighbourhood = list({tuple(tour) for tour in neighbourhood})
-    # convert each neighbour into their respective path lengths
-    path_lengths = [tsp.path_length(tour) for tour in neighbourhood]
-    avg_length = sum(path_lengths) / len(path_lengths)
 
     # print(f"Minimum neighbour length: {local_min}")
     # print(f"Average neighbour length: {avg_length:.2f}")
 
-    return local_min_length, avg_length
+    return local_min_length
 
 
 # -------------------------------
-# Neighbourhood generators
+# Best Neighbour Generator
 # -------------------------------
 def get_jump_local_minimum(tsp, tour, max_iterations):
     """Generate all neighbours by moving one city to a new position."""
@@ -147,10 +140,11 @@ def get_jump_local_minimum(tsp, tour, max_iterations):
                 break
         if not better_neighbour_found:
             break
-
-    # The plan here is to find the tour that is the local min, and then we could use another function to find all other neighbours
+    # return the tour and the current tour's length
     return current, current_path_length
 
+# Just copy and pasted the jump function, however, just changed sum iteration logic of indices 'i' and 'j' 
+# to iterate as exchange and 2opt needs
 def get_exchange_local_minimum(tsp, tour, max_iterations):
     """Generate all neighbours by swapping two cities."""
     iterations = 0
@@ -212,20 +206,21 @@ def get_2opt_local_minimum(tsp, tour, max_iterations):
 
 
 
-# decided to have a separate function to generate all neighbours from the local minimum to keep it more modular
-def get_neighbourhood(tour):
-    tour_body = tour[1:-1]
-    n = len(tour_body)
-    neighbourhood = []
-    for i in range(n): 
-        for j in range(n):
-            if i == j:
-                continue
-            new_tour_body = tour_body[:]
-            city = new_tour_body.pop(i)
-            new_tour_body.insert(j, city)
-            neighbourhood.append([tour[0]] + new_tour_body + [tour[-1]])
-    return neighbourhood
+# # decided to have a separate function to generate all neighbours from the local minimum to keep it more modular
+# # but after changing up the code for efficiency, it is not needed at all for now.
+# def get_neighbourhood(tour):
+#     tour_body = tour[1:-1]
+#     n = len(tour_body)
+#     neighbourhood = []
+#     for i in range(n): 
+#         for j in range(n):
+#             if i == j:
+#                 continue
+#             new_tour_body = tour_body[:]
+#             city = new_tour_body.pop(i)
+#             new_tour_body.insert(j, city)
+#             neighbourhood.append([tour[0]] + new_tour_body + [tour[-1]])
+#     return neighbourhood
 
 
 def random_permutation(n):
@@ -235,10 +230,14 @@ def random_permutation(n):
     return perm
 
 
+# Function use to run local_search that conencts to relevant neighbour generators based on operator inputted.
+# The understanding is that each instance, keep iterating until no better neighbour can be found.
+
+# Once every solution of 30 instances of a file i.e. "eil51" of one operator i.e. "jump" is found,
+# The average and minimum score is found for all of these instances and outputting into the results folder. 
 def run_all_instances():
-    tsp_names = ["eil51"]
-    # tsp_names = ["eil51", "eil76", "eil101", "kroA100", "kroC100",
-    #              "kroD100", "lin105", "pcb442", "pr2392", "st70", "usa13509"]
+    tsp_names = ["eil51", "eil76", "eil101", "kroA100", "kroC100",
+                "kroD100", "lin105", "pcb442", "pr2392", "st70", "usa13509"]
     results = {}
 
     for name in tsp_names:
@@ -249,11 +248,16 @@ def run_all_instances():
             print(f"Running TSP instance: {tsp.name}")
 
             # for operator_name in {"jump","exchange","2opt"}:
-            for operator_name in {"2opt"}:
+            for operator_name in {"jump", "exchange", "2pot"}:
+                average = 0
+                minimum =float('inf')
                 for _ in tqdm(range(30), desc=f"{name} - {operator_name}"):
-                    min_length, average_length = local_search(tsp, operator_name)
-                    # print(f"Name: {name}, Instance: {_}, Min: {min_length}, Mean: {average_length}")
-                    results[(name, operator_name, _)] = (min_length, average_length)
+                    min_length = local_search(tsp, operator_name)
+                    average += min_length
+                    if min_length < minimum:
+                        minimum = min_length
+                average /= 30
+                results[(name, operator_name)] = (minimum, average)
 
         except Exception as e:
             print(f"Failed loading or processing {name}: {e}")
