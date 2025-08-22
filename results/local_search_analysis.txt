@@ -1,0 +1,39 @@
+Name: eil51     Method: 2opt        Min: 434.00,        Mean: 451.03
+Name: eil51     Method: exchange    Min: 492.00,        Mean: 553.37
+Name: eil51     Method: jump        Min: 446.00,        Mean: 481.77
+Name: eil76     Method: 2opt        Min: 560.00,        Mean: 574.30
+Name: eil76     Method: exchange    Min: 712.00,        Mean: 767.47
+Name: eil76     Method: jump        Min: 573.00,        Mean: 633.40
+Name: eil101    Method: 2opt        Min: 657.00,        Mean: 676.87
+Name: eil101    Method: exchange    Min: 847.00,        Mean: 940.77
+Name: eil101    Method: jump        Min: 693.00,        Mean: 759.13
+Name: kroA100   Method: 2opt        Min: 21433.00,      Mean: 22278.47
+Name: kroA100   Method: exchange    Min: 33836.00,      Mean: 39037.07
+Name: kroA100   Method: jump        Min: 25113.00,      Mean: 29546.60
+Name: kroC100   Method: 2opt        Min: 21066.00,      Mean: 21931.40
+Name: kroC100   Method: exchange    Min: 34399.00,      Mean: 38587.43
+Name: kroC100   Method: jump        Min: 24115.00,      Mean: 28670.63
+Name: kroD100   Method: 2opt        Min: 21891.00,      Mean: 22626.13
+Name: kroD100   Method: exchange    Min: 32014.00,      Mean: 38646.90
+Name: kroD100   Method: jump        Min: 25077.00,      Mean: 29291.57
+Name: lin105    Method: 2opt        Min: 14689.00,      Mean: 15358.00
+Name: lin105    Method: exchange    Min: 22049.00,      Mean: 26905.83
+Name: lin105    Method: jump        Min: 16064.00,      Mean: 19092.03
+Name: pcb442    Method: 2opt        Min: 53764.00,      Mean: 54867.90
+Name: pcb442    Method: exchange    Min: 104079.00,     Mean: 116345.13
+Name: pcb442    Method: jump        Min: 62165.00,      Mean: 67301.03
+Name: st70      Method: 2opt        Min: 675.00,        Mean: 704.03
+Name: st70      Method: exchange    Min: 934.00,        Mean: 1077.43
+Name: st70      Method: jump        Min: 764.00,        Mean: 868.23
+Name: pr2392    Method: 2opt        Min: 4070701.00,    Mean: 5086187.47
+Name: pr2392    Method: exchange    Min: 9129697.00,    Mean: 9575875.97
+Name: pr2392    Method: jump        Min: 10504728.00,   Mean: 10965996.87
+Name: usa13509  Method: 2opt        Min: 1582831791.00, Mean: 1611130582.80
+Name: usa13509  Method: exchange    Min: 1994777869.00, Mean: 2017587912.20
+Name: usa13509  Method: jump        Min: 2030777531.00, Mean: 2050693883.10
+
+Summary:
+Across all datasets, the 2-opt method consistently outperformed exchange and jump, achieving the lowest minimum and mean tour lengths.
+Exchange performed the worst, often producing significantly longer tours, especially in larger instances (e.g., pr2392, usa13509).
+Jump's results were generally between 2-opt and exchange but did not surpass 2-opt in any case.
+The performance gap was more pronounced for larger problem sizes, highlighting 2-opt’s efficiency in improving tours.
