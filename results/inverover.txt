@@ -1,0 +1,10 @@
+Name: eil51      Method: inver-over   Min: 426, Mean: 426.17, Stddev : 0.38
+Name: eil76      Method: inver-over   Min: 538, Mean: 541.00, Stddev : 2.08
+Name: eil101     Method: inver-over   Min: 632, Mean: 636.90, Stddev : 3.09
+Name: kroA100    Method: inver-over   Min: 21282, Mean: 21282.00, Stddev : 0.00
+Name: kroC100    Method: inver-over   Min: 20749, Mean: 20768.77, Stddev : 34.67
+Name: kroD100    Method: inver-over   Min: 21294, Mean: 21370.30, Stddev : 48.22
+Name: lin105     Method: inver-over   Min: 14379, Mean: 14385.27, Stddev : 16.32
+Name: pcb442     Method: inver-over   Min: 53207, Mean: 54013.77, Stddev : 365.98
+Name: pr2392     Method: inver-over   Min: 4225678, Mean: 4343879.00, Stddev : 44130.37
+Name: st70       Method: inver-over   Min: 675, Mean: 676.27, Stddev : 2.02
