@@ -1,0 +1,11 @@
+EA-A: Generational Genetic Algorithm
+
+The algorithm uses a standard generational model that integrates Order Crossover (OX1) and Inversion Mutation. OX1 is used because of its ability to preserve the relative city sequence inherited from parent solutions, which is a key heuristic for the Traveling Salesman Problem (TSP). Inversion mutation is used because it works efficiently as a local search operator by reversing a portion of a tour to bring about drastic changes. This combination creates a robust base genetic algorithm that works efficiently over the solution space, balancing global discovery and local improvement.
+
+EA-B: Steady-State Genetic Algorithm
+
+The algorithm applies a steady-state approach, where it replaces only the two least-fit individuals in each generation. It features Edge Recombination (ERX) in addition to Swap Mutation. ERX is described as a powerful, context-sensitive crossover operator that preserves parental edges, and often leads to fast convergence. The steady-state method provides for the preservation of high-quality solutions, which can contribute over generations. The simple swap mutation adds a minor disturbance to prevent complete stagnation. This setting focuses on exploitation and fast convergence over deep exploration.
+
+EA-C: Memetic Algorithm (Hybrid Evolutionary Algorithm)
+
+This algorithm enhances the generational model of the evolutionary algorithm, EA-A, by adding a 2-opt local search, thus forming a reliable memetic algorithm. The genetic algorithm base (GA) enables the global exploration, successfully pointing to promising regions in the search arena. The 2-opt heuristic is used on an offspring at a 20% chance, making intense local exploitation to rapidly identify the closest local optimum. This hybrid technique takes the individual strengths of the global search (GA) and the local fine-tuning (2-opt), making it the most efficient design.

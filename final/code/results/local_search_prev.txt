@@ -1,0 +1,3 @@
+Name: eil51  Method: jump   Min: 437.00, Mean: 495.67
+Name: eil51  Method: exchange   Min: 484.00, Mean: 589.63
+Name: eil51  Method: 2opt   Min: 435.00, Mean: 449.23

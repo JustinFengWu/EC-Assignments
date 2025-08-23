@@ -1,0 +1,2 @@
+instance,avg_cost,stddev
+eil51,428.8,0.8366600265340756
