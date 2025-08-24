@@ -16,6 +16,11 @@ To start the program, open your terminal and run:
 python tsp_final.py
 
 You will then be asked to choose an exercise.
+Note: A `/results` folder also exists in `/code` for testing purposes.  
+When the code is executed, results are written to `/final/code/results`, 
+ensuring that test outputs do not overwrite the actual results intended 
+for their respective exercises in `/final/results`.
+
 
 
 #### Requirements
@@ -30,12 +35,12 @@ Some parameters (iterations, runs, tours) has been reduced for testing purposes.
 You can modify the following lines in the code to run full experiments:
 
 Exercise 7:
------   lines 1102-1104 for running exercise 7 Tours
+-----   lines 1117-1119 for running exercise 7 Tours
 
 Exercise 6:
------   lines 941-942 for running exercise 6 Tours
------   lines 775 and 776 for changing number of generations
------   lines 947 and 950 for changing the variables runs=5 to runs=30
+-----   lines 953-955 for running exercise 6 Tours
+-----   lines 787 and 788 for changing number of generations
+-----   lines 960 and 963 for changing the variables runs=5 to runs=30
 
 Exercise 2:
------   lines 899-901 for running exercise 2 Tours
+-----   lines 912-914 for running exercise 2 Tours

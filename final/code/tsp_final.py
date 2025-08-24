@@ -38,6 +38,225 @@ def write_results(results, results_dir=None):
 
     print(f"Local search results written to {out_file}")
 
+# -------------------------
+# Exercise 1
+# -------------------------
+
+class TSP:
+    def __init__(self, filename):
+        self.dimension = 0
+        self.coordinates = []
+        self.distance_matrix = []
+        self.node_section = False
+        self.name = ""
+        self.n = 0  # Add this attribute for compatibility
+
+        self.load_tsp(filename)
+        self.create_distance_matrix()
+        self.n = self.dimension  # Set n to dimension
+
+    @classmethod
+    def from_tsplib(cls, filename):
+        """Alternative constructor for compatibility"""
+        return cls(filename)
+
+    def load_tsp(self, filename):
+        # Extract name from filename
+        self.name = Path(filename).stem
+        
+        with open(filename, 'r') as f:
+            lines = f.readlines()
+
+        for line in lines:
+            line = line.strip()
+            if line.startswith("NAME"):
+                self.name = line.split(":")[1].strip()
+            elif line.startswith("DIMENSION"):
+                self.dimension = int(line.split(":")[1])
+            elif line.startswith("EDGE_WEIGHT_TYPE"):
+                edge_type = line.split(":")[1].strip()
+                if edge_type != "EUC_2D":
+                    raise ValueError(
+                        f"Unsupported EDGE_WEIGHT_TYPE: {edge_type}")
+            elif line == "NODE_COORD_SECTION":
+                self.node_section = True
+            elif line == "EOF":
+                break
+            elif self.node_section:
+                parts = line.split()
+                if len(parts) >= 3:
+                    _, x, y = parts[:3]
+                    self.coordinates.append((float(x), float(y)))
+
+    def create_distance_matrix(self):
+        n = self.dimension
+        self.distance_matrix = [[0]*n for _ in range(n)]
+
+        for i in range(n):
+            for j in range(i, n):
+                if i != j:
+                    xi, yi = self.coordinates[i]
+                    xj, yj = self.coordinates[j]
+                    dist = math.sqrt((xi - xj)**2 + (yi - yj)**2)
+                    self.distance_matrix[i][j] = round(dist)
+                    self.distance_matrix[j][i] = round(dist)
+
+    def path_length(self, perm):
+        """Calculate the total path length for a given permutation."""
+        if not perm or len(perm) < 2:
+            return 0
+        
+        total = 0
+        for i in range(len(perm) - 1):
+            city1 = perm[i] - 1  # Convert to 0-based indexing
+            city2 = perm[i + 1] - 1  # Convert to 0-based indexing
+            
+            # Validate indices
+            if city1 < 0 or city1 >= self.dimension or city2 < 0 or city2 >= self.dimension:
+                raise ValueError(f"Invalid city indices: {city1}, {city2} (dimension: {self.dimension})")
+            
+            total += self.distance_matrix[city1][city2]
+        return total
+
+    def get_distance(self, i, j):
+        """Get distance between cities i and j (0-based indexing)."""
+        if i < 0 or i >= self.dimension or j < 0 or j >= self.dimension:
+            raise ValueError(f"Invalid indices: i={i}, j={j}, dimension={self.dimension}")
+        return self.distance_matrix[i][j]
+
+# -------------------------
+# Exercise 2 
+# -------------------------
+
+# The function that connects operator with relative functions
+def local_search(tsp: TSP, neighbourhood_operator):
+    # Create an initial solution as an Individual
+    current_individual = Individual(tsp.dimension)
+    current_tour = current_individual.tour
+
+    if neighbourhood_operator == "jump":
+        _, local_min_length = get_jump_local_minimum(
+            tsp, current_tour, float('inf'))
+    elif neighbourhood_operator == "exchange":
+        _, local_min_length = get_exchange_local_minimum(
+            tsp, current_tour, float('inf'))
+    elif neighbourhood_operator == "2opt":
+        _, local_min_length = get_2opt_local_minimum(
+            tsp, current_tour, float('inf'))
+    else:
+        raise ValueError("Unknown neighbourhood operator")
+
+    return local_min_length
+
+
+# -------------------------------
+# Best Neighbour Generator  (Exercise 2)
+# -------------------------------
+def get_jump_local_minimum(tsp, tour, max_iterations):
+    """Generate all neighbours by moving one city to a new position."""
+    iterations = 0
+    # created copy of tour so that it can be updated with better neighbours
+    current = tour[:]
+    current_path_length = tsp.path_length(tour)
+
+    # just to make sure it doesn't run for too long, but if that's not a worry, then pass in float('inf')
+    while iterations < max_iterations:
+        iterations += 1
+        better_neighbour_found = False
+
+        # extrating the body out because i do not want to deal with potential indexing issues.
+        # It is much easier to just append start and end onto the body after.
+        tour_body = current[1:-1]
+        n = len(tour_body)
+
+        # Assume closed tour: start == end → do not move first or last city by only operating on the body
+        for i in range(n):
+            for j in range(n):
+                if i == j:
+                    continue
+                new_tour_body = tour_body[:]
+                city = new_tour_body.pop(i)
+                new_tour_body.insert(j, city)
+                new_tour = [tour[0]] + new_tour_body + [tour[-1]]
+                new_path_length = tsp.path_length(new_tour)
+
+                # instead of recursion just update current and re-iterate when better neighbour is found.
+                # solves the problem of reaching max recursion depth with larger problems.
+                if new_path_length < current_path_length:
+                    current, current_path_length = new_tour, new_path_length
+                    better_neighbour_found = True
+                    break
+            if better_neighbour_found:
+                break
+        if not better_neighbour_found:
+            break
+    # return the tour and the current tour's length
+    return current, current_path_length
+
+
+def get_exchange_local_minimum(tsp, tour, max_iterations):
+    """Generate all neighbours by swapping two cities."""
+    iterations = 0
+    current = tour[:]
+    current_path_length = tsp.path_length(tour)
+
+    while iterations < max_iterations:
+        iterations += 1
+        better_neighbour_found = False
+        n = len(current)
+
+        # need to change the logic here a little bit, searching for every exchange possibility. Other than that its all the same as jump.
+        for i in range(1, n - 2):
+            for j in range(i + 1, n - 1):
+                new_tour_body = current[:]
+                new_tour_body[i], new_tour_body[j] = new_tour_body[j], new_tour_body[i]
+                new_path_length = tsp.path_length(new_tour_body)
+
+                if new_path_length < current_path_length:
+                    current, current_path_length = new_tour_body, new_path_length
+                    better_neighbour_found = True
+                    break
+            if better_neighbour_found:
+                break
+        if not better_neighbour_found:
+            break
+
+    return current, current_path_length
+
+
+def get_2opt_local_minimum(tsp, tour, max_iterations):
+    """Generate all neighbours by 2-opt reversal."""
+    iterations = 0
+    current = tour[:]
+    current_path_length = tsp.path_length(tour)
+
+    while iterations < max_iterations:
+        iterations += 1
+        better_neighbour_found = False
+        n = len(current)
+
+        for i in range(1, n - 2):
+            for j in range(i + 1, n - 1):
+                # use python slicing to reverse sub-segment of the tour
+                # [:i] = from 0 to i (non-inclusive), [i:j + 1] = i 1o j (inclusive), [::-1] = reverse, [j + 1] = j + 1 onwards (inclusive)
+                new_tour_body = current[:i] + \
+                    current[i:j + 1][::-1] + current[j + 1:]
+                new_path_length = tsp.path_length(new_tour_body)
+
+                if new_path_length < current_path_length:
+                    current, current_path_length = new_tour_body, new_path_length
+                    better_neighbour_found = True
+                    break
+            if better_neighbour_found:
+                break
+        if not better_neighbour_found:
+            break
+
+    return current, current_path_length
+
+# -------------------------
+# Exercise 3
+# -------------------------
 
 class Individual:
     """Represents a single TSP solution (tour)."""
@@ -69,7 +288,7 @@ class Individual:
         return new_individual
 
     # -------------------------
-    # Mutation Operators
+    # Mutation Operators (Exercise 4)
     # -------------------------
 
     def swap(self, i, j):
@@ -121,6 +340,9 @@ class Population:
         self.tsp = tsp
         self.individuals = [Individual(tsp.dimension) for _ in range(size)]
 
+    # -------------------------
+    # Crossover Operators (Exercise 5)
+    # -------------------------
     @staticmethod
     def order_crossover(parent1: Individual, parent2: Individual):
         """Order Crossover (OX) → returns two offspring."""
@@ -447,216 +669,6 @@ class Population:
         return self.select_parents(method, population_size, **kwargs)
 
 
-class TSP:
-    def __init__(self, filename):
-        self.dimension = 0
-        self.coordinates = []
-        self.distance_matrix = []
-        self.node_section = False
-        self.name = ""
-        self.n = 0  # Add this attribute for compatibility
-
-        self.load_tsp(filename)
-        self.create_distance_matrix()
-        self.n = self.dimension  # Set n to dimension
-
-    @classmethod
-    def from_tsplib(cls, filename):
-        """Alternative constructor for compatibility"""
-        return cls(filename)
-
-    def load_tsp(self, filename):
-        # Extract name from filename
-        self.name = Path(filename).stem
-        
-        with open(filename, 'r') as f:
-            lines = f.readlines()
-
-        for line in lines:
-            line = line.strip()
-            if line.startswith("NAME"):
-                self.name = line.split(":")[1].strip()
-            elif line.startswith("DIMENSION"):
-                self.dimension = int(line.split(":")[1])
-            elif line.startswith("EDGE_WEIGHT_TYPE"):
-                edge_type = line.split(":")[1].strip()
-                if edge_type != "EUC_2D":
-                    raise ValueError(
-                        f"Unsupported EDGE_WEIGHT_TYPE: {edge_type}")
-            elif line == "NODE_COORD_SECTION":
-                self.node_section = True
-            elif line == "EOF":
-                break
-            elif self.node_section:
-                parts = line.split()
-                if len(parts) >= 3:
-                    _, x, y = parts[:3]
-                    self.coordinates.append((float(x), float(y)))
-
-    def create_distance_matrix(self):
-        n = self.dimension
-        self.distance_matrix = [[0]*n for _ in range(n)]
-
-        for i in range(n):
-            for j in range(i, n):
-                if i != j:
-                    xi, yi = self.coordinates[i]
-                    xj, yj = self.coordinates[j]
-                    dist = math.sqrt((xi - xj)**2 + (yi - yj)**2)
-                    self.distance_matrix[i][j] = round(dist)
-                    self.distance_matrix[j][i] = round(dist)
-
-    def path_length(self, perm):
-        """Calculate the total path length for a given permutation."""
-        if not perm or len(perm) < 2:
-            return 0
-        
-        total = 0
-        for i in range(len(perm) - 1):
-            city1 = perm[i] - 1  # Convert to 0-based indexing
-            city2 = perm[i + 1] - 1  # Convert to 0-based indexing
-            
-            # Validate indices
-            if city1 < 0 or city1 >= self.dimension or city2 < 0 or city2 >= self.dimension:
-                raise ValueError(f"Invalid city indices: {city1}, {city2} (dimension: {self.dimension})")
-            
-            total += self.distance_matrix[city1][city2]
-        return total
-
-    def get_distance(self, i, j):
-        """Get distance between cities i and j (0-based indexing)."""
-        if i < 0 or i >= self.dimension or j < 0 or j >= self.dimension:
-            raise ValueError(f"Invalid indices: i={i}, j={j}, dimension={self.dimension}")
-        return self.distance_matrix[i][j]
-
-
-# The function that connects operator with relative functions
-def local_search(tsp: TSP, neighbourhood_operator):
-    # Create an initial solution as an Individual
-    current_individual = Individual(tsp.dimension)
-    current_tour = current_individual.tour
-
-    if neighbourhood_operator == "jump":
-        _, local_min_length = get_jump_local_minimum(
-            tsp, current_tour, float('inf'))
-    elif neighbourhood_operator == "exchange":
-        _, local_min_length = get_exchange_local_minimum(
-            tsp, current_tour, float('inf'))
-    elif neighbourhood_operator == "2opt":
-        _, local_min_length = get_2opt_local_minimum(
-            tsp, current_tour, float('inf'))
-    else:
-        raise ValueError("Unknown neighbourhood operator")
-
-    return local_min_length
-
-
-# -------------------------------
-# Best Neighbour Generator  (Exercise 2)
-# -------------------------------
-def get_jump_local_minimum(tsp, tour, max_iterations):
-    """Generate all neighbours by moving one city to a new position."""
-    iterations = 0
-    # created copy of tour so that it can be updated with better neighbours
-    current = tour[:]
-    current_path_length = tsp.path_length(tour)
-
-    # just to make sure it doesn't run for too long, but if that's not a worry, then pass in float('inf')
-    while iterations < max_iterations:
-        iterations += 1
-        better_neighbour_found = False
-
-        # extrating the body out because i do not want to deal with potential indexing issues.
-        # It is much easier to just append start and end onto the body after.
-        tour_body = current[1:-1]
-        n = len(tour_body)
-
-        # Assume closed tour: start == end → do not move first or last city by only operating on the body
-        for i in range(n):
-            for j in range(n):
-                if i == j:
-                    continue
-                new_tour_body = tour_body[:]
-                city = new_tour_body.pop(i)
-                new_tour_body.insert(j, city)
-                new_tour = [tour[0]] + new_tour_body + [tour[-1]]
-                new_path_length = tsp.path_length(new_tour)
-
-                # instead of recursion just update current and re-iterate when better neighbour is found.
-                # solves the problem of reaching max recursion depth with larger problems.
-                if new_path_length < current_path_length:
-                    current, current_path_length = new_tour, new_path_length
-                    better_neighbour_found = True
-                    break
-            if better_neighbour_found:
-                break
-        if not better_neighbour_found:
-            break
-    # return the tour and the current tour's length
-    return current, current_path_length
-
-
-def get_exchange_local_minimum(tsp, tour, max_iterations):
-    """Generate all neighbours by swapping two cities."""
-    iterations = 0
-    current = tour[:]
-    current_path_length = tsp.path_length(tour)
-
-    while iterations < max_iterations:
-        iterations += 1
-        better_neighbour_found = False
-        n = len(current)
-
-        # need to change the logic here a little bit, searching for every exchange possibility. Other than that its all the same as jump.
-        for i in range(1, n - 2):
-            for j in range(i + 1, n - 1):
-                new_tour_body = current[:]
-                new_tour_body[i], new_tour_body[j] = new_tour_body[j], new_tour_body[i]
-                new_path_length = tsp.path_length(new_tour_body)
-
-                if new_path_length < current_path_length:
-                    current, current_path_length = new_tour_body, new_path_length
-                    better_neighbour_found = True
-                    break
-            if better_neighbour_found:
-                break
-        if not better_neighbour_found:
-            break
-
-    return current, current_path_length
-
-
-def get_2opt_local_minimum(tsp, tour, max_iterations):
-    """Generate all neighbours by 2-opt reversal."""
-    iterations = 0
-    current = tour[:]
-    current_path_length = tsp.path_length(tour)
-
-    while iterations < max_iterations:
-        iterations += 1
-        better_neighbour_found = False
-        n = len(current)
-
-        for i in range(1, n - 2):
-            for j in range(i + 1, n - 1):
-                # use python slicing to reverse sub-segment of the tour
-                # [:i] = from 0 to i (non-inclusive), [i:j + 1] = i 1o j (inclusive), [::-1] = reverse, [j + 1] = j + 1 onwards (inclusive)
-                new_tour_body = current[:i] + \
-                    current[i:j + 1][::-1] + current[j + 1:]
-                new_path_length = tsp.path_length(new_tour_body)
-
-                if new_path_length < current_path_length:
-                    current, current_path_length = new_tour_body, new_path_length
-                    better_neighbour_found = True
-                    break
-            if better_neighbour_found:
-                break
-        if not better_neighbour_found:
-            break
-
-    return current, current_path_length
-
-
 # wrapper function for exercise 6 EA algorithms
 def two_opt_local_search(tsp, ind, max_iterations=1000):  # Changed from float('inf')
     """
@@ -954,7 +966,9 @@ def run_exercise6():
           f"and {RESULTS_DIR/'your_EA.txt'}")
 
 
-# ---------------- Exercise 7 - Inver-over ----------------
+# -------------------------
+# Inerover (Exercise 7)
+# -------------------------
 
 def mean(vals):
     """Calculate the average of all values."""
