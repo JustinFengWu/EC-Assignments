@@ -1,0 +1,4 @@
+The Inver-over algorithm performed better than our evolutionary algorithm on smaller instances such as eil51, eil76, and eil101, showing lower average tour costs and smaller standard deviations.
+For medium-sized problems like kroC100 and kroD100, the results were mixed, with our EA sometimes giving slightly better solutions but with more variability.
+On larger instances such as pr2392 and usa13509, our evolutionary algorithm clearly outperformed Inver-over, obtaining much lower average costs.
+Overall, Inver-over seems well-suited for small to medium TSP instances, while our evolutionary approach is more robust and effective on larger problems.
