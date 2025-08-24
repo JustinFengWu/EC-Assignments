@@ -1,0 +1,44 @@
+Manav Bijlani (Student Id : a1846580)
+I worked on Exercise 7 (Inver-over Evolutionary Algorithm) of this Assignment. Started by reading and getting a concrete
+understanding of the referenced research paper. Here I got the high level understanding of how the algorithm works. 
+Then in order to make sure that my code was modular I re-used the TSP instance declared in tsp.py file and re-wrote the path function.
+Additionally, I implemented the algorithm, added comments, made sure that the coding standards were consistent and performed testing
+to analyse the accuracy of my algorithm. Finally, I wrote down the findings from the results, and shared with the team member
+who was responsible for creating a report comparing the best results in Exercise 6 with Exercise 7.
+
+
+Timothy Tew (Student Id : 1871031)
+I worked alongside Justin, on Exercises 1,2,3,4 of this Assignment . Got an early start on the assignment so that the classes and 
+functions required for the later exercises were ready to unblock development for other team members who were doing exercises 5-7. 
+I also worked on merging the exercises 5-7 into a cohesive python file.
+
+
+Justin Feng Wu (student id: a1891628)
+I collaborated with Tim on Exercises 1–4, implementing the foundational classes and functions early and computing results for Exercise 2. 
+To maintain consistency, I refactored and commented the existing codebase at that time making it easier for the rest of the team to 
+extend and integrate their work. I also refactored the entirety of final version before submission, to increase readability.
+
+
+Dhairya Kandhari (student Id: a1874318)
+I worked on Exercise 5 (Selection Methods) of this assignment. Started by reviewing the lecture materials and understanding the theoretical 
+foundations of the three required selection methods: fitness-proportional, tournament selection, and elitism. I got a deep understanding of 
+how each algorithm works and their mathematical requirements. I also discussed the implementation approach with Justin and Tim. Then in order
+to make sure that my code was modular, I integrated the selection methods into the existing Population class structure and ensured compatibility 
+with our TSP framework. Additionally, I implemented all three selection algorithms, handled the tricky fitness transformations needed because
+TSP wants to minimize path length but selection methods expect higher values to be better and added comprehensive comments explaining my reasoning
+
+
+I, Atharva Manish Harde (a1863563), and Ruchir Patel (a1881080) 
+worked together on Part 6 (Exercise 6: Evolutionary Algorithms and Benchmarking). We collaborated on designing and implementing the three 
+evolutionary algorithms using different combinations of crossover and mutation operators. We set up benchmarking across multiple population sizes 
+and generation counts, ensured the algorithms were compatible with the existing TSP framework, and organized the output data for analysis.
+I also worked together on the comparison report for Part 7. After reviewing the inver-over algorithm’s results, we wrote the 100-word summary 
+comparing it to our best EA implementation, ensuring the report was accurate, concise, and supported by the data.
+
+
+Ruchir Patel (Student Id : A1881080)
+I worked on Part 6 (Exercise 6: Evolutionary Algorithms and Benchmarking) together with Atharva Manish Harde. We jointly implemented the three 
+evolutionary algorithm variants, integrating different crossover and mutation operators within the TSP framework. I contributed to implementing 
+the memetic GA with 2-opt local search, and assisted in setting up benchmarking across varying population sizes and generation checkpoints. I also 
+worked on organizing and validating the output data for performance analysis. In addition, I collaborated on the comparison report for Part 7, 
+reviewing the inver-over results and preparing the 100-word summary comparing it to our best EA implementation.
