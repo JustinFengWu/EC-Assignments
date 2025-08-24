@@ -268,7 +268,10 @@ class Population:
 
         return erx(parent1, parent2), erx(parent2, parent1)
 
-    # SELECTION METHODS (Exercise 5)
+    # -------------------------
+    # Selection Methods  (Exercise 5)
+    # -------------------------
+
     def fitness_proportional_selection(self, num_parents, transformation="shifted_inverse"):
         """
         Fitness-proportional selection (roulette wheel method)
@@ -277,6 +280,7 @@ class Population:
             num_parents: Number of parents to select
             transformation: "shifted_inverse" or "min_max_normalization"
         """
+        # just to perform some safety checks, ensuring that all individuals have fitness values and collect them all together.
         for individual in self.individuals:
             if individual.fitness is None:
                 individual.evaluate(self.tsp)
@@ -291,7 +295,9 @@ class Population:
             raise ValueError(
                 "Some individuals still have None fitness after evaluation")
 
-        # I need to flip this because TSP minimizes path length but roulette wheel needs higher values
+
+        # Transform path lengths into a "higher is better" scoring system
+        # As roulette wheel needs positive probabilities that are proportional to how path lengths work
         if transformation == "shifted_inverse":
             L_min = min(path_lengths)
             epsilon = 1e-6
@@ -374,6 +380,7 @@ class Population:
             available_pool.remove(participant2)
 
             # Comparing the fitness and choosing winner as lower path length = better
+            # Losers gets placed back into the pool
             if participant1.fitness < participant2.fitness:
                 winner = participant1
                 available_pool.append(participant2)
@@ -545,7 +552,7 @@ def local_search(tsp: TSP, neighbourhood_operator):
 
 
 # -------------------------------
-# Best Neighbour Generator
+# Best Neighbour Generator  (Exercise 2)
 # -------------------------------
 def get_jump_local_minimum(tsp, tour, max_iterations):
     """Generate all neighbours by moving one city to a new position."""
@@ -560,8 +567,7 @@ def get_jump_local_minimum(tsp, tour, max_iterations):
         better_neighbour_found = False
 
         # extrating the body out because i do not want to deal with potential indexing issues.
-        # It feels much easier to just append start and end onto the body after.
-        # [1:-1] means starting at the index 1 and ending before last index
+        # It is much easier to just append start and end onto the body after.
         tour_body = current[1:-1]
         n = len(tour_body)
 
@@ -601,7 +607,7 @@ def get_exchange_local_minimum(tsp, tour, max_iterations):
         better_neighbour_found = False
         n = len(current)
 
-        # need to change the logic here a little bit, searching for every exchange possibility
+        # need to change the logic here a little bit, searching for every exchange possibility. Other than that its all the same as jump.
         for i in range(1, n - 2):
             for j in range(i + 1, n - 1):
                 new_tour_body = current[:]
@@ -681,7 +687,9 @@ def tournament(pop):
     return p1 if p1.fitness < p2.fitness else p2
 
 
-# ---------------- Exercise 6 ----------------
+# -------------------------------
+#  Exercise 6
+# -------------------------------
 
 def run_ea_generational_with_checkpoints(tsp, pop_size, gens, crossover, mutation, p_mut, ls_rate, cuts):
     # Create initial population as list of Individuals
@@ -764,6 +772,7 @@ def run_ea_steady_state_with_checkpoints(tsp, pop_size, gens, crossover, mutatio
 
 
 # ---------------- Benchmark ----------------
+# GEN_CUTS = [2000, 5000, 10000, 20000]  # Original
 GEN_CUTS = [10, 20, 30, 40]  # Reduced for testing
 
 

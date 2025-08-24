@@ -1,1 +1,1 @@
-Name: eil51       Method: inver-over   Min: 435, Mean: 437.80, Stddev : 2.93
+Name: eil51       Method: inver-over   Min: 433, Mean: 437.20, Stddev : 3.37
