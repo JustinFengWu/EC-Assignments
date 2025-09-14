@@ -1,0 +1,4 @@
+For function 18, algorithms RLS and (1+1) EA illustrates improves smoothly 
+and outperforms Random Search.
+It is noticed that convergence for function 18 is much slower compared to previous, more simpler functions. 
+

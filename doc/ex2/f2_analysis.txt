@@ -1,0 +1,4 @@
+For function 2, both algorithms, RLS and the (1+1) EA, slowly improves and reaches optimum,
+with (1+1) EA showing steadier progress. Random Search lags significantly, plateauing below optimum.
+Variance is higher early on for all methods, but starts to narros as RLS and (1+1) EA begin converging.
+Once again, random sampling is at a disadvantage.
