@@ -22,44 +22,49 @@ def random_search(func, budget):
 
 def rls(func, budget):
     n = func.meta_data.n_variables
-    # start with a random solution
-    x = np.random.randint(2, size=n)
-    fx = func(x)
+
+    initialSolution = np.random.randint(2, size=n)
+    initialSolution_f = func(
+        initialSolution
+    )  # func() literally just evaluates the fitness of argument
 
     for _ in range(budget - 1):
-        # flip exactly 1 random bit
-        y = x.copy()
+        newSolution = initialSolution.copy()
         i = np.random.randint(n)
-        y[i] ^= 1
-        fy = func(y)
-        # accept if at least as good
-        if fy >= fx:
-            x, fx = y, fy
+        newSolution[i] ^= 1  # flipping a random bit
+        newSolution_f = func(newSolution)
+
+        if newSolution_f >= initialSolution_f:
+            initialSolution, initialSolution_f = newSolution, newSolution_f
 
     func.reset()
-    return fx, x
+    return initialSolution_f, initialSolution
 
 
 def one_plus_one_ea(func, budget):
     n = func.meta_data.n_variables
-    p = 1.0 / n  # mutation probability per bit
-    # start with a random solution
-    x = np.random.randint(2, size=n)
-    fx = func(x)
+    p = (
+        1.0 / n
+    )  # the probabilty that determines whether each individual bit will flip or not
+
+    initialSolution = np.random.randint(2, size=n)
+    initialSolution_f = func(initialSolution)
 
     for _ in range(budget - 1):
-        # mutate each bit independently with prob 1/n
-        y = x.copy()
-        flips = np.random.rand(n) < p
-        if flips.any():
-            y[flips] ^= 1
-        fy = func(y)
-        # accept if at least as good
-        if fy >= fx:
-            x, fx = y, fy
+        newSolution = initialSolution.copy()
+        # generates an array of n elements, where each element is a number between 0-1
+        flips = (
+            np.random.rand(n) < p
+        )  # compare each element with p, resulting in boolean array
+        if flips.any():  # checks if any elements in flips is true
+            newSolution[flips] ^= 1  # flip all relevant bits
+        newSolution_f = func(newSolution)
+
+        if newSolution_f >= initialSolution_f:
+            initialSolution, initialSolution_f = newSolution, newSolution_f
 
     func.reset()
-    return fx, x
+    return initialSolution_f, initialSolution
 
 
 # Declaration of problems to be tested.
