@@ -1,4 +1,0 @@
-For function 24, Random Search once again plateaus far below the optimum. 
-Instead, both RLS and the (1+1) EA converges to the maximum, with RLS having slightly better performance. 
-The shaded areas shows standard deviation that is of moderate level, 
-but overall, random sampling remains on bottom.

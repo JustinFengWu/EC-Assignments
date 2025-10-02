@@ -1,4 +1,0 @@
-For function 3, both RLS and the (1+1) EA reaches optimum quickly once again.
-with RLS having best performance.
-Random Search, once again, levels below optimum, and increases much more slowly.
-standard deviation for random search remains pretty much similar for the entire budget.

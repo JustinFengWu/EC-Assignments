@@ -1,4 +1,0 @@
-For function 23, all three algorithms quickly converges, 
-nearly reaching optimum within the range of only a few thousand evaluations. 
-Consistent with previous functions, both RLS and the (1+1) EA outperforms Random Search.
-The small shaded areas demonstrates stability for all three algorithms.

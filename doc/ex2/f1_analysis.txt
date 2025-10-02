@@ -1,4 +1,0 @@
-For Function 1, both RLS and the (1+1) EA reaches the optimum consistently, 
-with RLS showing faster early progress. In comparsion, random Search performs much worse, never reaching optimum.
-Variance is low for RLS and (1+1) EA across different runs, but random search is higher. 
-It highlights the effectiveness of guided search over random sampling.

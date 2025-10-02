@@ -1,4 +1,0 @@
-For function 25, random Search again falls far behind, though improving slowly.
-RLS and the (1+1) EA improves quickly at first, but rls plateau earlier, while the (1+1)
-EA continues to progress, and exceeds RLS' max score. 
-Overall, (1+1) EA came out on top with best top score.
