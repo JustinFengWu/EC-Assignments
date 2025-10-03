@@ -6,3 +6,13 @@ in the IOH profiler to generate plots. Finally, I was responsible for analysing 
 performance comparisons, and convergence behaviors observed in the final graphs. 
 Additonally, made some updates to README.md to incorporate the syntax to activate virtual environment. 
 
+
+Dhairya Kandhari (a1874318) :- For Exercise 4, I implemented the MMAS and MMAS* algorithms based 
+on the research paper, writing the code for the construction procedure and pheromone update mechanism. 
+The main difference between the two algorithms is that MMAS accepts solutions with equal fitness while 
+MMAS* only accepts improvements. I set up experiments to test both algorithms on seven different functions 
+with three different evaporation rates (ρ = 1, 1/√n, and 1/n), running everything 10 times with a budget of 
+100,000 evaluations. I then uploaded all the results to IOHanalyzer to generate comparison plots that
+ combined the Exercise 2 and Exercise 4 data. Finally, I analysed all the results and wrote the report, 
+ finding that ρ=1/√n worked best across all functions and surprisingly, MMAS and MMAS* performed almost 
+ identically even though theory predicted they should differ on plateau functions.
