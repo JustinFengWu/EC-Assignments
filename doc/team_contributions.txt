@@ -1,0 +1,8 @@
+Manav Bijlani (a1846580) :-  I was responsible for completing exercise 5 of this assignment. 
+This included writing the complete Python code for the own_aco_algorithm, which demonstrataed the pheromone 
+update rules and the enhanced local search function, alongside making sure the Ant Colony Optimisation
+Algorithm is optimised. Further, I compiled all the functions along with MMAS and MMAS* plots and uploaded 
+in the IOH profiler to generate plots. Finally, I was responsible for analysing the plots, writing the analytical report to discuss the results, 
+performance comparisons, and convergence behaviors observed in the final graphs. 
+Additonally, made some updates to README.md to incorporate the syntax to activate virtual environment. 
+
