@@ -6,7 +6,7 @@ All of the functions will be automatically run through all three algorithms and 
 changed on line 85.
 
 Exercise 4: The code can be easily executed by running " python ../implementation.py " in bash terminal.
-The code will automatically rrun through and written into a data folder in /code/ex4/data. 
+The code will automatically run through and written into a data folder in /code/ex4/data. 
 
 Exercise 5 : The Ioh module needs to be installed in order to execute the own_aco.py file. That can be done
 directly into the CLI or using a virtual envionment. Below are the steps that needs to be followed to execute
