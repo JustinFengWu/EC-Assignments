@@ -14,6 +14,8 @@ MMAS* only accepts improvements. I set up experiments to test both algorithms on
 with three different evaporation rates (ρ = 1, 1/√n, and 1/n), running everything 10 times with a budget of 
 100,000 evaluations. I then uploaded all the results to IOHanalyzer to generate comparison plots that
  combined the Exercise 2 and Exercise 4 data. Finally, I analysed all the results and wrote the report.
+
+
 Timothy Tew (Student Id : 1871031)
 I collaborated with Justin on Exercises 1 and 2 on this assignment. I worked on implementing the random local search 
 and (1+1)EA and visualizing results for each function on IOHanalyzer. I also worked on completing the proofs for the
