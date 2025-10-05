@@ -26,3 +26,9 @@ Justin Feng Wu (student id: a1891628)
 I collaborated with Tim on Exercises 1–2, starting the assignment early to set the pace. I worked on the random local search 
 and altered some parts of the already implemented random search to fit the task. Analysis of function visuals were written, and 
 I also contribtued towards completing the mathematical proofs.
+
+Ruchir Sandeep Patel (A1881080) and Atharva Manish Harde (A1863563):
+For Exercise 3, we designed a Genetic Algorithm (GA) using uniform crossover, bit-flip mutation, and tournament selection with a parent population of 20 individuals. 
+We set the evaluation budget based on the settings from Exercise 2. The GA was applied to three benchmark problems: om, lo, and labs, and results were logged using IOHprofiler.
+We ran 10 independent trials for each problem and analyzed the performance in terms of convergence, solution quality, and efficiency in reaching optimal solutions. 
+The results were compared with those from Exercise 2, and the findings were discussed in the final report.
