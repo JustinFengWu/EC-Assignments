@@ -145,7 +145,7 @@ for algo_name, algo_func in algorithms:
     
     # setup IOH logger
     l = logger.Analyzer(
-        root="ex1/data",
+        root="ex1/data1",
         folder_name=algo_name,
         algorithm_name=algo_name,
         algorithm_info=f"Exercise 1"
@@ -154,7 +154,7 @@ for algo_name, algo_func in algorithms:
     for problem_id in problem_ids:
         print(f"Problem {problem_id}:")
         
-        problem = get_problem(problem_id, problem_class=ProblemClass.GRAPH)
+        problem = get_problem(problem_id, instance=1, problem_class=ProblemClass.GRAPH)
         problem.attach_logger(l)
         
         # run algorithm 30 times on this instance

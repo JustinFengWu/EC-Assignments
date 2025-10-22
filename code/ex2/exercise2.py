@@ -81,30 +81,41 @@ def gsemo_run(problem, seed, k_limit=None):
         evaluations += 1
 
         insert_pareto(population, (child, childReward, childCost))
-        # can delete later?
+        # can delete later
         if childReward > bestSoFar:
             bestSoFar = childReward
         if childCost <= k_limit and childReward > bestFeasible:
             bestFeasible = childReward
             
-    print(f"Run complete: pid={problem}, seed={seed}")
+    print(f"Run complete: pid={problem.meta_data.problem_id}, seed={seed}")
 
 def main():
-    # run all required instances 30×
+    problems = [2100, 2101, 2102, 2103, 2200, 2201, 2202, 2203, 2300, 2301, 2302]
     
-    problems = [2100,2101,2102,2103,2200,2201,2202,2203,2300,2301,2302]
-    for problemId in problems:
-        problem = get_problem(fid=problemId, instance=1, problem_class=ProblemClass.GRAPH)
-        
-        l = logger.Analyzer(
-            root="ex2Data",  # top folder for all runs
-            folder_name=f"f{problem}_run",
-            algorithm_name="GSEMO",
-            algorithm_info="Ex2 stuff")
-        
-        problem.attach_logger(l)
-        for run in range(RUNS):
-            gsemo_run(problem, seed=run+1)
+    
+            # Create a dedicated logger for this problem
+    l = logger.Analyzer(
+        root="ex2/data1",
+        folder_name=f"GSEMO",
+        algorithm_name="GSEMO",
+        algorithm_info="Exercise 2 - GSEMO"
+    )
 
+    for problemId in problems:
+        print(f"\nRunning GSEMO on problem {problemId}...")
+
+        # Load and attach the problem
+        problem = get_problem(fid=problemId, instance=1, problem_class=ProblemClass.GRAPH)
+        problem.attach_logger(l)
+
+        # Run 30 independent runs
+        for run in range(RUNS):
+            print(f"  Run {run+1}/{RUNS}", end="\r")
+            gsemo_run(problem, seed=run+1)
+            problem.reset()
+
+        # Detach logger at the end of this problem
+        print(f"  Completed all runs for problem {problemId}")
+    del l
 if __name__ == "__main__":
     main()
