@@ -215,36 +215,58 @@ def moe_uniform(problem, seed, pop_size, budget):
 # -------------------- RUNNERS --------------------
 
 def run_single_objective():
-    """Runs Exercise 3 Part 1 experiments and logs to IOHAnalyzer."""
+    """Runs Exercise 3 Part 1 experiments and logs to IOHAnalyzer (same structure as Ex1)."""
+    l = logger.Analyzer(
+        root="ex3/data1_single",
+        folder_name=f"SOE",
+        algorithm_name="SOE_uniform",
+        algorithm_info="Exercise 3 single-objective (repair + diversity)"
+    )
+    
     for fid in PROBLEMS:
+        print(f"\nRunning SOE on problem {fid}...")
+
+        # Load and attach the problem
         problem = get_problem(fid=fid, instance=1, problem_class=ProblemClass.GRAPH)
+        problem.attach_logger(l)
+
+        # Run multiple population sizes and seeds
         for pop_size in POP_SIZES:
-            for seed in range(1, RUNS+1):
-                l = logger.Analyzer(
-                    root="ex3_logs_single",
-                    folder_name=f"SOE_f{fid}_pop{pop_size}_run{seed}",
-                    algorithm_name="SOE_uniform",
-                    algorithm_info="Exercise 3 single-objective (repair+diversity)"
-                )
-                problem.attach_logger(l)
+            for seed in range(1, RUNS + 1):
+                print(f"  pop={pop_size}, run={seed}/{RUNS}", end="\r")
                 soe_uniform(problem, seed, pop_size, BUDGET)
-                problem.detach_logger()
+                problem.reset()
+        print(f"  Completed all runs for problem {fid}")
+
+    del l
+
 
 def run_multi_objective():
-    """Runs Exercise 3 Part 2 experiments and logs to IOHAnalyzer."""
+    """Runs Exercise 3 Part 2 experiments and logs to IOHAnalyzer (same structure as Ex1)."""
+            # Create logger once per problem
+    l = logger.Analyzer(
+        root="ex3/data1_multi",
+        folder_name=f"MOE",
+        algorithm_name="MOE_uniform",
+        algorithm_info="Exercise 3 multi-objective (NSGA-II style)"
+    )
+    
     for fid in PROBLEMS:
+        print(f"\nRunning MOE on problem {fid}...")
+
+        # Load and attach the problem
         problem = get_problem(fid=fid, instance=1, problem_class=ProblemClass.GRAPH)
+        problem.attach_logger(l)
+
+        # Run multiple population sizes and seeds
         for pop_size in POP_SIZES:
-            for seed in range(1, RUNS+1):
-                l = logger.Analyzer(
-                    root="ex3_logs_multi",
-                    folder_name=f"MOE_f{fid}_pop{pop_size}_run{seed}",
-                    algorithm_name="MOE_uniform",
-                    algorithm_info="Exercise 3 multi-objective (NSGA-II style)"
-                )
-                problem.attach_logger(l)
+            for seed in range(1, RUNS + 1):
+                print(f"  pop={pop_size}, run={seed}/{RUNS}", end="\r")
                 moe_uniform(problem, seed, pop_size, BUDGET)
-                problem.detach_logger()
+                problem.reset()
+        print(f"  Completed all runs for problem {fid}")
+    del l
+
 
 # -------------------- MAIN ENTRY --------------------
 
