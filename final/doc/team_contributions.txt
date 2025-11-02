@@ -1,0 +1,8 @@
+Manav Bijlani (a1846580) :- I was responsible for completing last two parts of Exercise 4 of this assignment.
+This included generating and analysing plots that visualise the performance of various algorithms we 
+used throughout this assignment across all given problem instances. For each instance, I
+produced plots showing the trade offs of the first of 30 runs for GSEMO using IOHProfiler. Then I performed 
+a detailed analysis by writing observation statements for each instance, mentioning algorithm performance 
+trends and convergence behaviour. Apart from that, I compared the results obtained from 100,000 fitness 
+evaluations against the previous 10,000 evaluation runs, identifying improvements in stability, variance and
+the level of optimisation. 
