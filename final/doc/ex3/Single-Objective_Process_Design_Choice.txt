@@ -1,0 +1,40 @@
+For finding the design choices we first need to understand the problem setting.
+Both MaxCoverage and MaxInfluence are monotone submodular problems, meaning that 
+we can only select a certian number of items for a solution of n items in total, 
+with the goal of maximizing fitness.
+
+Design Choices:
+Each solution will have a binary representation for a solution of n items: 
+an array of size n, with each element either being 0 or 1. Sum of all elements
+is the cost.
+
+The population will be 50 population size, with each individual
+initialised randomly. 
+
+The problem instance provided by IOH provides the fitness.
+
+Mutation will be done through bit-flip, with the probabiltiy of flipping for each bit
+being 1/n. Also need ot make sure that a but flip will occur, meaning that the bit
+flipping loop will continue to run until one bit is flipped.
+
+The selection strategy chosen is torunament selection of size 2.
+After new offspring is inserted into the population, the one with the worst fitness it removed.
+Solutions exceeding itme limit will be penalised, but the solutions are kept instead of 
+being thrown away. ALso remove infeasible solutions with negative fitness values.
+
+
+Deisgn Choices Reasoning:
+Binary representation of solution was chosen as it fits really well with modelling subset
+selection under uniform constraint.
+
+population size of 50 was chosen as it functioned best after experimenting with 10, 20, and 50
+
+Bit-flip mutation with probabilty of 1/n was chosen as it is smooth flowing, and pretty
+standard for bit string mutation operations.
+
+Adding a repairing/panalties for solutions exceed constraints to ensure higher fitness values 
+assigned to valid subsets.
+
+Tournament selection was chosen because it was simple and stable.
+
+Strive to achieve diversity through random selection to avoid premature convergence.

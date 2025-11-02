@@ -1,0 +1,44 @@
+We have to unerstand the the problem settings once again. For MaxCoverage and MaxInfluence 
+each problem involves maximizing fitness while being under a uniform constraint, and also 
+minimise cost. This problem setting would turn these problems into exploring a pareto front
+of trade-offs between slution quality and resources usage.
+
+Design Choices:
+
+Binary representation of solutions. Implmentation and reasoning exactly the same as single-
+-objective.
+
+Population initialisation being the same as SOE, with population size being 50.
+
+Fitness evaluation is returned by the problem instance.
+
+The mutation operation is still bit-flip with flipping chance of 1/n.
+
+The repair logic is the same with SOE too. Infeasible solutions of negative fitness values
+are thrown out.
+
+Parent selection is done through tournament selection, and random selection for non-dominated
+individuals.
+Each iteration creates one child per parent.
+
+Diversity and ranking is the key differnence to SOE.
+To balance cost and reward, non-dominated sorting and crowding distance was used following
+the NSGA-II principle.
+- classify population into pareto fronts F1, F2, ... where F1 are the non-dominated solutions.
+- Lower Rank fronts have higher priority for survival.
+Crowding distance:
+- within each front, estimate density of neighbours, and prefer more isolated individuals as
+it can help maintain diversity.
+Survivor Selection:
+- Sort by Dominance Rank, where within each front, by descending crowding distance. 
+
+Design Choice Reasoning:
+Fast Non-dominated sorting was chosen to be implemented as it maintian pareto fronts very well
+and it is proven on submodular problems.
+
+corwding distance preserves the spread of solutions, which encourages variety in reward vs cost.
+
+population size of 50 was chosen as it functioned best after experimenting with 10, 20, and 50
+
+Repair mechanism used again with reasoning simlar to that of SOE's, which is to keep population
+feasbile without penalties that are way too harsh.
