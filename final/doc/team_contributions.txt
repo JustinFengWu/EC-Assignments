@@ -6,3 +6,16 @@ a detailed analysis by writing observation statements for each instance, mention
 trends and convergence behaviour. Apart from that, I compared the results obtained from 100,000 fitness 
 evaluations against the previous 10,000 evaluation runs, identifying improvements in stability, variance and
 the level of optimisation. 
+
+Timothy Tew (Student Id : 1871031)
+I collaborated with Justin on Exercise 2 on this assignment, and ran half of the code for exercise 4 for 100,000 budget.
+For exercise 2, I worked on implementing the GSEMO algorithm, particularly establishing the multi-objective formulation 
+for monotone sub-modular problems and implemented the fitness function. I also used the results obtained by Justin for 
+the MaxCoverage and MaxInfluence problems and visualized the results for each function on IOHanalyzer, followed by detailed 
+analysis of these visualisations.
+
+Justin Feng Wu (student id: a1891628)
+I collaborated with Tim on Exercise 2 on this assignment, and ran some of the code for exercise 4 for 100,000 budget. 
+For exercise 2, I finished off the GSEMO algorithm by implementing the pareto front mechanism and the main running loop. 
+It was also my responsibility to run the program and obtain the results of Tim's analysis (visualisations and analysis). 
+Furthermore, I also graphed the trade-off plots for all instances of exercise 2's GSEMO algorithm.
