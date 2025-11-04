@@ -27,3 +27,6 @@ and adapted our existing GA for these new problem instances. I ran all three alg
 instances (MaxCoverage, MaxInfluence, and PackWhileTravel) 30 times each with 10,000 fitness evaluations, 
 set up the IOHprofiler logger to track everything properly, then uploaded the results to IOHanalyzer to create 
 the fixed budget plots and wrote up the comparison analysis.
+
+Atharva Manish Harde (a1863563) & Ruchir Sandeep Patel a1881880
+We handled the Improvements part of Exercise 4. I reviewed the results for all required instances and wrote the per-instance improvement notes, describing performance trends, convergence behaviour, and variance/stability at 100,000 evaluations. I also compared the 100k outcomes to the earlier 10k runs, highlighting where algorithms improved and how the results became more stable, and then added these write-ups to the “Exercise 4 Analysis” document for submission.
