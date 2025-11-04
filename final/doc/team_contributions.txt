@@ -29,7 +29,10 @@ set up the IOHprofiler logger to track everything properly, then uploaded the re
 the fixed budget plots and wrote up the comparison analysis.
 
 Atharva Manish Harde (a1863563) & Ruchir Sandeep Patel a1881880
-We handled the Improvements part of Exercise 4. I reviewed the results for all required instances and wrote the 
+We handled mainly exercie 3 and the Improvements part of Exercise 4. I reviewed the results for all required instances and wrote the 
 per-instance improvement notes, describing performance trends, convergence behaviour, and variance/stability at 
 100,000 evaluations. I also compared the 100k outcomes to the earlier 10k runs, highlighting where algorithms improved 
 and how the results became more stable, and then added these write-ups to the “Exercise 4 Analysis” document for submission.
+For Exercise 3 we had to determine the best way to implement MOE and SOE algorithms, and experiment with different population
+sizes that would lead to optimal results. Once written up with assistance of AI (allowed as per assignment description), the design 
+choices and reasoning for both algorithms were written, along with the visualisations.
